@@ -15,19 +15,19 @@ UPPER_GREEN = np.array([70, 255, 255])
 def show_ranges():
 
     # Create an image filled with the lower bound of the red color range
-    lower_red_img = np.full((100, 100, 3), LOWER_RED, dtype=np.uint8)
+    lower_red_img = np.full((100, 150, 3), LOWER_RED, dtype=np.uint8)
     lower_red_img = cv2.cvtColor(lower_red_img, cv2.COLOR_HSV2BGR)
 
     # Create an image filled with the upper bound of the red color range
-    upper_red_img = np.full((100, 100, 3), UPPER_RED, dtype=np.uint8)
+    upper_red_img = np.full((100, 150, 3), UPPER_RED, dtype=np.uint8)
     upper_red_img = cv2.cvtColor(upper_red_img, cv2.COLOR_HSV2BGR)
 
     # Create an image filled with the lower bound of the green color range
-    lower_green_img = np.full((100, 100, 3), LOWER_GREEN, dtype=np.uint8)
+    lower_green_img = np.full((100, 150, 3), LOWER_GREEN, dtype=np.uint8)
     lower_green_img = cv2.cvtColor(lower_green_img, cv2.COLOR_HSV2BGR)
 
     # Create an image filled with the upper bound of the green color range
-    upper_green_img = np.full((100, 100, 3), UPPER_GREEN, dtype=np.uint8)
+    upper_green_img = np.full((100, 150, 3), UPPER_GREEN, dtype=np.uint8)
     upper_green_img = cv2.cvtColor(upper_green_img, cv2.COLOR_HSV2BGR)
 
     # Concatenate the images horizontally
@@ -104,7 +104,6 @@ def process_image(img: np.ndarray) -> tuple[cv2.Mat | np.ndarray, list[list[int]
                 # Find contours in the red and green masks
                 contours_red, _ = cv2.findContours(mask_red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours_green, _ = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
                 # Process the red contours
                 for cnt in contours_red:
                     area = cv2.contourArea(cnt)
@@ -144,14 +143,15 @@ if __name__ == '__main__':
     img = cv2.imread('C:/Users/Bogdan/Desktop/licenta/unity/Paint3D/ScreenShot.png')
     img, m = process_image(img)
 
+    print("Matrix: ",m)
+
     l = convert_matrix(m)
-    print(l)
+    print("List: ",l)
 
     move, score = player.minimax(2, l)
 
-    print(move)
-
     # Show the image
+    show_ranges()
     cv2.imshow('Detected Shapes', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

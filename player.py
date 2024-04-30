@@ -59,5 +59,38 @@ def minimax(player : int,board :list[int]) -> tuple[int | None,float | None]:
 
 # Function to draw the board
 def draw_board():
+    print("---------")
     for i in range(0, 9, 3):
         print(board[i], board[i+1], board[i+2])
+    print("---------")
+
+
+def main():
+    current_player = 1  # Player 1 starts
+
+    while True:
+        draw_board()
+        if current_player == 1:
+            move = int(input("Enter your move (0-8): "))
+            if board[move] != 0:
+                print("Invalid move. Try again.")
+                continue
+            board[move] = current_player
+        else:
+            move, _ = minimax(current_player, board)
+            board[move] = current_player
+
+        if check_winner(current_player, board):
+            draw_board()
+            print(f"Player {current_player} wins!")
+            break
+        elif is_board_full(board):
+            draw_board()
+            print("It's a draw!")
+            break
+        else:
+            current_player = 3 - current_player  # Switch player
+
+
+if __name__ == "__main__":
+    main()

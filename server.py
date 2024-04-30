@@ -64,7 +64,7 @@ class RobotSocket:
 
         return data_string
 
-    def extractJoints(self, joints):
+    def extractJoints(self, joints : robodk.Mat):
         return [
             round(joints[0, 0], 2),
             round(joints[1, 0], 2),
@@ -103,6 +103,16 @@ class RobotSocket:
             current_pose * robodk.transl(0, size, -size),  # Bottom right
             current_pose,  # Center
         ]
+
+        print(points)
+
+        # Move the robot to each point in sequence
+        for point in points:
+            try:
+                self.robot.MoveJ(point)
+            except robodk.TargetReachError:
+                print(f"Failed to move the robot to point {point}.")
+                break
 
     def moveRobotInCircle(self, radius, num_points=100):
         # Get the current position of the robot
