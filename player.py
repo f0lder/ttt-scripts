@@ -1,14 +1,31 @@
-"""This module contains the player class and the minimax algorithm for the AI player."""
-
+"""
+-----------------------------------------------------------------------
+Project: Playing Tic-Tac-Toe with a robot using Computer Vision and RoboDK
+Filename: player.py
+Object: This file contains the functions to play Tic-Tac-Toe
+Created Date: Ursan Bogdan-Gabriel 22/04/2024
+Last Modified: Ursan Bogdan-Gabriel 5/09/2024
+-----------------------------------------------------------------------
+"""
 
 board = [0 for _ in range(9)]  # 0 represents an empty space
 
-# Function to check if the board is full
 def is_board_full(board : list[int]):
+    """
+    Function name: is_board_full
+    Objective: Check if the board is full
+    Input: board: list[int]
+    Output: bool
+    """
     return 0 not in board
 
-# Function to check if a player has won
 def check_winner(player : int,board : list[int]):
+    """
+    Function name: check_winner
+    Objective: Check if the player has won
+    Input: player: int, board: list[int]
+    Output: bool
+    """
     # Check rows
     for i in range(0, 9, 3):
         if board[i] == board[i+1] == board[i+2] == player:
@@ -26,6 +43,12 @@ def check_winner(player : int,board : list[int]):
 
 # Minimax function
 def minimax(player : int,board :list[int]) -> tuple[int | None,float | None]:
+    """
+    Function name: minimax
+    Objective: Implement the minimax algorithm
+    Input: player: int, board: list[int]
+    Output: tuple[int | None,float | None]
+    """
     if check_winner(1,board):  # 1 represents 'X'
         return None, -1
     elif check_winner(2,board):  # 2 represents 'O'
@@ -59,6 +82,12 @@ def minimax(player : int,board :list[int]) -> tuple[int | None,float | None]:
 
 # Function to draw the board
 def draw_board():
+    """
+    Function name: draw_board
+    Objective: Draw the Tic-Tac-Toe board
+    Input: None
+    Output: None
+    """
     print("---------")
     for i in range(0, 9, 3):
         print(board[i], board[i+1], board[i+2])
@@ -66,6 +95,12 @@ def draw_board():
 
 
 def main():
+    """
+    Function name: main
+    Objective: Play the Tic-Tac-Toe game
+    Input: None
+    Output: None
+    """
     current_player = 1  # Player 1 starts
 
     while True:

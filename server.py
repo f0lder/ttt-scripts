@@ -1,3 +1,13 @@
+"""
+-----------------------------------------------------------------------
+Project: Playing Tic-Tac-Toe with a robot using Computer Vision and RoboDK
+Filename: server.py
+Object: This file contains the server class that connects to the robot
+Created Date: Ursan Bogdan-Gabriel 22/04/2024
+Last Modified: Ursan Bogdan-Gabriel 5/09/2024
+-----------------------------------------------------------------------
+"""
+
 import socket
 import detect
 import player
@@ -7,12 +17,19 @@ import robodk.robolink as robolink
 import robodk
 import math
 
+#initialize the RoboDK API
 RDK = robolink.Robolink()
 
+# Path to the image that will be used for the simulation
 PATH_TO_UNITY_IMG = "C:/Users/Bogdan/Desktop/licenta/unity/Paint3D/ScreenShot.png"
 
 
 class RobotSocket:
+    """
+    Class name: RobotSocket
+    Objective: This class contains the functions to connect to the robot and send data
+    """
+
     def __init__(
         self,
         host="127.0.0.1",
@@ -21,6 +38,12 @@ class RobotSocket:
         mid="MID",
         start="Start",
     ):
+        """
+        Function name: __init__
+        Objective: Initialize the RobotSocket class
+        Input: host: str, port: int, robot: str, mid: str, start: str
+        Output: None
+        """
         self.host = host
         self.port = port
         self.robot = RDK.Item(robot)
@@ -46,12 +69,24 @@ class RobotSocket:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self):
+        """
+        Function name: connect
+        Objective: Connect to the robot
+        Input: None
+        Output: None
+        """
         self.sock.bind((self.host, self.port))
         self.sock.listen()
         self.conn, self.addr = self.sock.accept()
         self.start_server()
 
     def prepare_data(self, status: str, message: str, piece: int, choice: int):
+        """
+        Function name: prepare_data
+        Objective: Prepare the data to be sent
+        Input: status: str, message: str, piece: int, choice: int
+        Output: str
+        """
         data_to_send = {
             "status": status,
             "joints": self.extractJoints(self.robot.Joints()),
@@ -65,6 +100,12 @@ class RobotSocket:
         return data_string
 
     def extractJoints(self, joints : robodk.Mat):
+        """
+        Function name: extractJoints
+        Objective: Extract the joints from the robot
+        Input: joints: robodk.Mat
+        Output: list[float]
+        """
         return [
             round(joints[0, 0], 2),
             round(joints[1, 0], 2),
@@ -75,6 +116,12 @@ class RobotSocket:
         ]
 
     def make_move(self, cell: int, symbol: int):
+        """
+        Function name: make_move
+        Objective: Move the robot to a cell
+        Input: cell: int, symbol: int
+        Output: None
+        """
         t = RDK.Item(str(cell))
         if t.Valid() and symbol in [1, 2]:
             self.robot.MoveJ(self.start)
@@ -89,6 +136,12 @@ class RobotSocket:
             print("Target does not exist or symbol is invalid.")
 
     def moveRobotInXShape(self, size: float):
+        """
+        Function name: moveRobotInXShape
+        Objective: Move the robot in an X shape
+        Input: size: float
+        Output: None
+        """
         # Get the current pose of the robot
         current_pose = self.robot.Pose()
 
@@ -115,6 +168,12 @@ class RobotSocket:
                 break
 
     def moveRobotInCircle(self, radius, num_points=100):
+        """
+        Function name: moveRobotInCircle
+        Objective: Move the robot in a circle
+        Input: radius: float, num_points: int
+        Output: None
+        """
         # Get the current position of the robot
         current_pose = self.robot.Pose()
 
@@ -133,13 +192,32 @@ class RobotSocket:
 
             points.append(point)
 
+        # Move the robot to each point in sequence
+        for point in points:
+            try:
+                self.robot.MoveJ(point)
+            except robodk.TargetReachError:
+                print(f"Failed to move the robot to point {point}.")
+                break
+
     def returnCoords(self, target: robolink.Item) -> tuple[float, float, float]:
-        """Return the x,y,z coordinates of a target item."""
+        """
+        Function name: returnCoords
+        Objective: Return the coordinates of a target
+        Input: target: robolink.Item
+        Output: tuple[float, float, float]
+        """
         target_pose = target.Pose()
         x, y, z = target_pose.Pos()
         return x, y, z
 
     def createTarget(self, name, x: float, y: float, z: float):
+        """
+        Function name: createTarget
+        Objective: Create a target
+        Input: name: str, x: float, y: float, z: float
+        Output: robolink.Item
+        """
         new_target = RDK.AddTarget(name)
 
         o = [0.0, 90.0, 0.0]
@@ -151,6 +229,12 @@ class RobotSocket:
         return new_target
 
     def creategrid(self, distance: int):
+        """
+        Function name: creategrid
+        Objective: Create the grid
+        Input: distance: int
+        Output: None
+        """
         print("Creating grid...")
 
         x, y, z = self.returnCoords(self.mid)
@@ -168,6 +252,12 @@ class RobotSocket:
         ]
 
     def start_server(self):
+        """
+        Function name: start_server
+        Objective: Start the server
+        Input: None
+        Output: None
+        """
         self.creategrid(50)
         with self.conn:
             d = self.prepare_data("done", "Connection established.", 1, -1)
@@ -266,5 +356,11 @@ class RobotSocket:
                     print(f"Socket error: {e}")
 
     def close(self):
+        """
+        Function name: close
+        Objective: Close the connection
+        Input: None
+        Output: None
+        """
         self.conn.close()
         self.sock.close()

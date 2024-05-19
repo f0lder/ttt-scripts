@@ -1,6 +1,14 @@
 """
-Module for detecting the Tic-Tac-Toe grid and the shapes inside it
+-----------------------------------------------------------------------
+Project: Playing Tic-Tac-Toe with a robot using Computer Vision and RoboDK
+Filename: detect.py
+Object: This file contains the functions to detect the Tic-Tac-Toe grid and the shapes inside it
+Created Date: Ursan Bogdan-Gabriel 22/04/2024
+Last Modified: Ursan Bogdan-Gabriel 5/09/2024
+-----------------------------------------------------------------------
 """
+
+# Import the necessary libraries
 import cv2
 import numpy as np
 import player as player
@@ -13,6 +21,12 @@ LOWER_GREEN = np.array([50, 70, 50])
 UPPER_GREEN = np.array([70, 255, 255])
 
 def show_ranges():
+    """
+    Function name: show_ranges
+    Objective: Display the color ranges for red and green
+    Input: None
+    Output: None
+    """
 
     # Create an image filled with the lower bound of the red color range
     lower_red_img = np.full((100, 150, 3), LOWER_RED, dtype=np.uint8)
@@ -39,11 +53,10 @@ def show_ranges():
 
 def convert_matrix(m: list[list[int]]) -> list[int]:
     """
-    Convert a matrix to a list
-    Args:
-        m: The input matrix
-    Returns:
-        l: The output list
+    Function name: convert_matrix
+    Objective: Convert a matrix to a list
+    Input: m: list[list[int]]
+    Output: list[int]
     """
     m = [list(i) for i in zip(*m)]
     l = [item for sublist in m for item in sublist]
@@ -52,12 +65,10 @@ def convert_matrix(m: list[list[int]]) -> list[int]:
 
 def process_image(img: np.ndarray) -> tuple[cv2.Mat | np.ndarray, list[list[int]]]:
     """
-    Process the image to detect the Tic-Tac-Toe grid and the shapes inside it
-    Args:
-        img: The input image
-    Returns:
-        img: The output image with the detected shapes
-        tictactoe: A matrix representing the Tic-Tac-Toe grid
+    Function name: process_image
+    Objective: Process the image to detect the Tic-Tac-Toe grid and the shapes inside it
+    Input: m: np.ndarray (image)
+    Output: tuple[cv2.Mat | np.ndarray, list[list[int]]]
     """
     h, w = img.shape[:2]
     img = cv2.resize(img, (w//2, h//2))
@@ -139,6 +150,7 @@ def process_image(img: np.ndarray) -> tuple[cv2.Mat | np.ndarray, list[list[int]
     return img, tictactoe
 
 
+# Main function
 if __name__ == '__main__':
     img = cv2.imread('C:/Users/Bogdan/Desktop/licenta/unity/Paint3D/ScreenShot.png')
     img, m = process_image(img)
