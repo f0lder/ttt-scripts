@@ -51,6 +51,7 @@ class RobotSocket:
         if not self.robot.Valid():
             print("Robot does not exist.")
             return
+        print("Robot #{robot} found..")
 
         self.robot.setPoseFrame(RDK.Item("Board"))
 
@@ -59,12 +60,14 @@ class RobotSocket:
         if not self.mid.Valid():
             print("Mid does not exist.")
             return
+        print("Mid position valid..")
 
         self.start = RDK.Item(start)
 
         if not self.start.Valid():
             print("Start does not exist.")
             return
+        print("Start position valid..")
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -75,16 +78,17 @@ class RobotSocket:
         Input: None
         Output: None
         """
+        print(f"Connecting to {self.host}:{self.port}...")
         self.sock.bind((self.host, self.port))
         self.sock.listen()
         self.conn, self.addr = self.sock.accept()
         self.start_server()
 
-    def prepare_data(self, status: str, message: str, piece: int, choice: int):
+    def prepare_data(self, status: str, message: str, piece: int, choice: int, winner: int):
         """
         Function name: prepare_data
         Objective: Prepare the data to be sent
-        Input: status: str, message: str, piece: int, choice: int
+        Input: status: str, message: str, piece: int, choice: int, winner: int
         Output: str
         """
         data_to_send = {
@@ -93,6 +97,7 @@ class RobotSocket:
             "message": message,
             "piece": piece,
             "choice": choice,
+            "winner" : winner
         }
 
         data_string = json.dumps(data_to_send)
@@ -156,8 +161,6 @@ class RobotSocket:
             current_pose * robodk.transl(0, size, -size),  # Bottom right
             current_pose,  # Center
         ]
-
-        print(points)
 
         # Move the robot to each point in sequence
         for point in points:
@@ -258,12 +261,13 @@ class RobotSocket:
         Input: None
         Output: None
         """
+        print("Starting server...")
         self.creategrid(50)
         with self.conn:
-            d = self.prepare_data("done", "Connection established.", 1, -1)
+            d = self.prepare_data("done", "Connection established.", 1, -1, 0)
             print(d)
             self.conn.sendall((d + "\n").encode())
-
+            print("Connection established. Server is running...")
             while True:
                 try:
                     data = self.conn.recv(1024)
@@ -280,6 +284,7 @@ class RobotSocket:
                         message = ""
                         piece = 1
                         c = -1
+                        winner = 0
 
                         if command == "readGrid":
                             # on simulation just load the image
@@ -314,6 +319,8 @@ class RobotSocket:
                                     + str(c)
                                     + "\nX wins"
                                 )
+                                winner = 1
+
 
                             if score == 1:
                                 print("Player O wins")
@@ -324,6 +331,18 @@ class RobotSocket:
                                     + str(c)
                                     + "\nO wins"
                                 )
+                                winner = 2
+
+                            if player.is_board_full(m):
+                                print("Draw")
+                                message = (
+                                    "Grid read: "
+                                    + str(m)
+                                    + " Choice: "
+                                    + str(c)
+                                    + "\nDraw"
+                                )
+                                winner = 3
 
                             if c is not None:
                                 self.make_move(c, piece)
@@ -348,8 +367,8 @@ class RobotSocket:
                         if c is None:
                             c = -1
 
-                        d = self.prepare_data("done", message, piece, c)
-                        print(d)
+                        d = self.prepare_data("done", message, piece, c, winner)
+                        print("Sending data: " + d)
 
                         self.conn.sendall((d + "\n").encode())
                 except socket.error as e:

@@ -53,7 +53,7 @@ def minimax(player : int,board :list[int]) -> tuple[int | None,float | None]:
         return None, -1
     elif check_winner(2,board):  # 2 represents 'O'
         return None, 1
-    elif is_board_full(board):
+    elif is_board_full(board):  # Draw
         return None, 0
 
     best_move = None
