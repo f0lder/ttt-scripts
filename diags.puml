@@ -1,0 +1,34 @@
+@startuml Line
+!theme vibrant
+scale 3
+
+class MonoBehaviour {
+    {abstract} void Awake()
+    {abstract} void Update()
+}
+
+class Line {
+    + LineRenderer lineRenderer
+    + float DistanceThreshold = 0.1
+    - List<Vector3> points
+    + void SetPoint(Vector3 point)
+    + void UpdateLine(Vector3 position)
+}
+
+class MouseIntersect {
+    - GameObject linePrefab
+    - Button redButton
+    - Button greenButton
+    - Vector3 initialMousePos
+    - float distance = 0.01f
+    - Line ActiveLine
+    - Color lineColor = Color.red
+    + void Awake()
+    + void ChangeColor(Color color)
+    + void Update()
+}
+
+MonoBehaviour <|-- Line
+MonoBehaviour <|-- MouseIntersect
+MouseIntersect --> Line : ActiveLine
+@enduml

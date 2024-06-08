@@ -20,6 +20,9 @@ UPPER_RED = np.array([10, 255, 255])
 LOWER_GREEN = np.array([50, 70, 50])
 UPPER_GREEN = np.array([70, 255, 255])
 
+# Path to the image
+PATH_TO_UNITY_IMG = "C:/Users/Bogdan/Desktop/licenta/unity/Paint3D/ScreenShot.png"
+
 def show_ranges():
     """
     Function name: show_ranges
@@ -152,7 +155,8 @@ def process_image(img: np.ndarray) -> tuple[cv2.Mat | np.ndarray, list[list[int]
 
 # Main function
 if __name__ == '__main__':
-    img = cv2.imread('C:/Users/Bogdan/Desktop/licenta/unity/Paint3D/ScreenShot.png')
+
+    img = cv2.imread(PATH_TO_UNITY_IMG)
     img, m = process_image(img)
 
     print("Matrix: ",m)
@@ -163,7 +167,7 @@ if __name__ == '__main__':
     move, score = player.minimax(2, l)
 
     # Show the image
-    show_ranges()
+    #show_ranges()
     cv2.imshow('Detected Shapes', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

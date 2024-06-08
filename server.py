@@ -21,7 +21,7 @@ import math
 RDK = robolink.Robolink()
 
 # Path to the image that will be used for the simulation
-PATH_TO_UNITY_IMG = "C:/Users/Bogdan/Desktop/licenta/unity/Paint3D/ScreenShot.png"
+PATH_TO_UNITY_IMG = "C:/Users/Bogdan/Desktop/licenta/unity/Paint3D_RO/ScreenShot.png"
 
 
 class RobotSocket:
@@ -320,7 +320,6 @@ class RobotSocket:
                                     + "\nX wins"
                                 )
                                 winner = 1
-
 
                             if score == 1:
                                 print("Player O wins")
