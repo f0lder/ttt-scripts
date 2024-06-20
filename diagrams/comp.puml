@@ -1,0 +1,49 @@
+@startuml Comp
+
+!theme vibrant
+scale 3
+
+
+component RoboDK{
+    [Robot]
+    component "Board" {
+        component 3DModel
+        component Start
+        component MID
+        component REST
+
+    }
+    portin API
+
+}
+
+component "Unity simulation\n\n\n"{
+    component Level
+    component Scripts
+    component Objects
+    portout networkStream
+}
+
+
+component Python{
+    portin SocketServer
+    component main.py
+    component server.py
+    component detect.py
+    component player.py
+}
+
+
+
+[main.py] -down-> [server.py]
+[server.py] -down-> [detect.py]
+[server.py] -down-> [player.py]
+
+[main.py] -down-> [API] : uses
+main.py --> [SocketServer] : creates
+
+[Scripts] --> [networkStream]
+[networkStream] -right-> [SocketServer] : connects to
+[Level] --> [Objects] : contains
+
+@enduml

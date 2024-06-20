@@ -1,0 +1,97 @@
+@startuml Client
+!theme vibrant
+scale 3
+
+class MonoBehaviour {
+    {abstract} Awake()
+    {abstract} Start()
+    {abstract} Update()
+}
+
+class TCPIPClient << (S,#FF7700) singleton>>{
+    - {static} Instance : TCPIPClient
+    - networkStream : NetworkStream
+    - clientStreamReader : StreamReader
+    - clientStreamWriter : StreamWriter
+    - serverReady : bool
+    - connectToRoboDKButton : Button
+    - connectedUI : GameObject
+    - roboDkIsWorkingPanel : GameObject
+    - logText : TMP_Text
+    - WinnerPanel : GameObject
+    - winnerText : TMP_Text
+    - playAgainButton : Button
+    + Connect()
+    + playAgain()
+    + sendCommand(arg1 : string, arg2 : string, arg3 : string)
+    + WaitForServerMsg()
+    + ConnectionErrorHandler()
+}
+
+object Instance {
+}
+
+class PieceSpawner {
+    - CrossPrefab : GameObject
+    - CirclePrefab : GameObject
+    - points : Vector3[,]
+    - spacing : float
+    - tcpipClient : TCPIPClient
+    + Awake()
+    + Start()
+    + SpawnObjectAtIndex(i : int, sign : int)
+}
+
+class ServerResponse {
+    + status : string
+    + joints : List<float>
+    + message : string
+    + piece : int
+    + choice : int = -1
+    + winner : int
+}
+
+
+class SendCommand {
+    - tcpipClient : TCPIPClient
+    - command : string
+    - param1 : string
+    - param2 : string
+    + SendCommand(tcpipClient : TCPIPClient, command : string, param1 : string = '', param2 : string = '')
+    + Execute() : Task
+}
+
+interface ICommand {
+    + Execute()
+}
+
+
+class CommandController {
+    - sendButton : Button
+    - readGrid : Button
+    - moveTo : Button
+    - tcpipClient : TCPIPClient
+    - inputField : TMP_InputField
+    + Start()
+}
+
+MonoBehaviour <|-- TCPIPClient
+MonoBehaviour <|-- PieceSpawner
+MonoBehaviour <|-- CommandController
+
+TCPIPClient --> Instance : creates
+
+PieceSpawner::TCPIPClient --> Instance: dependency
+SendCommand::TCPIPClient --> Instance : dependency
+CommandController::TCPIPClient --> Instance : dependency
+
+ICommand <|.. SendCommand
+
+CommandController --> SendCommand : uses
+TCPIPClient --> ServerResponse : uses
+
+together {
+    class TCPIPClient
+    class CommandController
+}
+@enduml

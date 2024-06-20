@@ -1,10 +1,10 @@
 """
 -----------------------------------------------------------------------
-Project: Playing Tic-Tac-Toe with a robot using Computer Vision and RoboDK
-Filename: server.py
-Object: This file contains the server class that connects to the robot
-Created Date: Ursan Bogdan-Gabriel 22/04/2024
-Last Modified: Ursan Bogdan-Gabriel 5/09/2024
+Priect de diploma: APLICAȚIE BAZATĂ PE INTELIGENȚĂ ARTIFICIALĂ DE TIP TIC TAC TOE SIMULATĂ PE UN ROBOT VIRTUAL
+Nume fișier: server.py
+Obiect: Acest fișier conține clasa server care se conectează la robot
+Data creării: Ursan Bogdan-Gabriel 22/04/2024
+Ultima modificare: Ursan Bogdan-Gabriel 20/06/2024
 -----------------------------------------------------------------------
 """
 
@@ -17,7 +17,7 @@ import robodk.robolink as robolink
 import robodk
 import math
 
-#initialize the RoboDK API
+# initialize the RoboDK API
 RDK = robolink.Robolink()
 
 # Path to the image that will be used for the simulation

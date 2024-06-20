@@ -1,0 +1,21 @@
+@startuml Mics
+
+
+class MonoBehaviour {
+    {abstract} Awake() : void
+    {abstract} Update() : void
+}
+
+interface ICommand {
+    + Execute() : Task
+}
+
+class MainThreadDispatcher <<singleton>> {
+    - {static} instance : MainThreadDispatcher
+    - actions : ConcurrentQueue<Action>
+    + Enqueue(Action action) : void
+}
+
+MonoBehaviour <|-- MainThreadDispatcher
+
+@enduml

@@ -1,0 +1,68 @@
+@startuml Flow
+
+!theme vibrant
+scale 3
+
+[*] --> S1
+S1 : Primeste comanda
+
+
+S1 --> S2
+S2 : Imparte comanda in argumente
+
+state C1 <<choice>>
+
+S2 --> C1 : Este valid?
+C1 --> S3 : Da
+
+S3 : Alege comanda din lista
+
+state C2 <<choice>>
+
+S3 --> C2
+
+
+C2 --> S4
+C2 --> S5
+
+S4 : Citeste imaginea
+S5 : Ruleaza programul de test
+
+state C3 <<choice>>
+
+S4 --> C3
+
+C3 --> S6 : Tabla reala
+
+S6 : Detecteaza folosind camera
+
+
+C3 --> S7 : Imagine
+
+S7 : Detecteaza folosind imaginea
+
+state F1 <<fork>>
+
+S6 --> F1
+S7 --> F1
+
+F1 --> S9
+
+S9 : Misca robotul la o anumita tinta
+
+S5 -->S8
+
+S8 : Trimite la RoboDK
+
+state F2 <<fork>>
+
+S8 --> F2
+S9 --> F2
+C1 --> F2
+C2 --> F2
+
+
+F2 --> S1
+
+
+@enduml

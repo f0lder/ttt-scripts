@@ -1,0 +1,47 @@
+@startuml
+
+!theme vibrant
+scale 4
+autonumber
+skinparam sequence {
+    ParticipantBackgroundColor black
+}
+
+participant RoboDK as R << (R,blue) >>
+participant Python as P << (P,green) >>
+participant Unity as U << (U,gray) >>
+
+P --> P : Rularea \nscriptului
+P --> R : Initializare Robolink
+
+activate R
+R --> P : Succes
+deactivate R
+
+P --> P : Pornirea \nserverului
+activate P
+
+loop Asteapta conexiune
+    U --> P : Se apasă\n pe CONECTARE
+end
+
+P --> U : Trimite confirmare
+U --> U: Actualizare \ninterfata
+
+loop Asteapta comenzi
+    U --> P : Trimite comandă
+    activate P
+    P --> P : Procesare comandă
+    P --> R : Trimite comandă\nexecutare mișcare
+    activate R
+    R --> P : Așteaptă \nfinalizarea comenzii
+    deactivate R
+    P --> U : Trimite stadiu joc
+    deactivate P
+    U --> U : Actualizează\ninterfață și obiecte
+end
+
+P --> P : Închidere server
+deactivate P
+
+@enduml

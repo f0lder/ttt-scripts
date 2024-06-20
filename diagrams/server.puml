@@ -1,0 +1,33 @@
+@startuml RobotAngles
+!theme vibrant
+scale 3
+
+class MonoBehaviour {
+    {abstract} Awake()
+    {abstract} Start()
+    {abstract} Update()
+}
+
+class RobotAngles {
+    - angles : List<float>
+    - oldAngles : List<float>
+    - transforms : List<Transform>
+    - tcpipClient : TCPIPClient
+    - lerpTime : float
+    - lerpDuration : float
+    + HandleMessage(a : List<float>)
+    + ApplyAngles()
+    + Interpolate(i : int) : float
+    + SetAngle(index : int, newAngle : float)
+    + SetAngles(newAngles : List<float>)
+}
+
+class TCPIPClient <<singleton>> {
+    ...
+    +{static} Instance : TCPIPClient
+    ...
+}
+
+MonoBehaviour <|-- RobotAngles
+RobotAngles::TCPIPClient --> TCPIPClient::Instance :Reference
+@enduml

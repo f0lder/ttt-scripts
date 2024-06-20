@@ -1,0 +1,31 @@
+@startuml Scripts
+
+!theme vibrant
+scale 3
+
+[main.py] -down-> [server.py] : import
+
+[server.py] -down-> [detect.py]
+[server.py] -down-> [player.py]
+
+note right of [main.py]
+    Se creează o intanță
+    a clasei RobotSocket
+end note
+
+note right of [server.py]
+    Conține definirea
+    clasei RobotSocket
+end note
+
+note bottom of [detect.py]
+    Conține funcțiile
+    folosite pentru extragerea
+    trasăturilor din poză
+end note
+
+note bottom of [player.py]
+    Conține algortimul pentru
+    luarea deciziilor în X și 0
+end note
+@enduml

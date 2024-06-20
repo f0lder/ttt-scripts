@@ -1,0 +1,44 @@
+@startuml Unity
+
+!theme vibrant
+scale 2
+top to bottom direction
+
+component Paint3D {
+    component Level {
+        component "Main Camera"
+        component "Directional Light"
+        component Plane
+        component EventSystem
+        component "Scene handler"{
+            This component handles user authentication.
+                - Functions:
+                -- Login
+                -- Register
+                -- Logout
+        }
+
+        component Ground
+        component GridCenter
+        component UI
+        component Robot
+        component Grid
+    }
+    frame Assets {
+        component Materials
+        frame Prefabs {
+            component Circle
+            component Cross
+            component GridPrefab
+            component Line
+            component RobotPrefab
+        }
+    }
+}
+
+
+
+[Robot] -down-> [RobotPrefab] : Instantiate
+[Grid] -down-> [GridPrefab] : Instantiate
+
+@enduml

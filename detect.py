@@ -1,10 +1,10 @@
 """
 -----------------------------------------------------------------------
-Project: Playing Tic-Tac-Toe with a robot using Computer Vision and RoboDK
-Filename: detect.py
-Object: This file contains the functions to detect the Tic-Tac-Toe grid and the shapes inside it
-Created Date: Ursan Bogdan-Gabriel 22/04/2024
-Last Modified: Ursan Bogdan-Gabriel 5/09/2024
+Priect de diploma: APLICAȚIE BAZATĂ PE INTELIGENȚĂ ARTIFICIALĂ DE TIP TIC TAC TOE SIMULATĂ PE UN ROBOT VIRTUAL
+Nume fișier: detect.py
+Descriere: Acest fișier conține funcții pentru detectarea formelor geometrice dintr-o imagine
+Data creării: Ursan Bogdan-Gabriel 22/04/2024
+Ultima modificare: Ursan Bogdan-Gabriel 20/06/2024
 -----------------------------------------------------------------------
 """
 
